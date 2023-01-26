@@ -15,7 +15,7 @@ class LSystem {
   /**
    * Main constructor of the LSystem.
    * @param {Array} symbols is a set of symbols, represented by characters.
-   * @param {Array} rules is a set of rules, see "Rule" class.
+   * @param {LRule[]} rules is a set of rules, see "Rule" class.
    * @param {String} axiom is the ground truth and acts as the starting point for the System.
    */
   constructor(symbols, rules, axiom) {
@@ -45,9 +45,14 @@ class LSystem {
 
   /**
    * Adds a new Rule to the rule set. If the Rule already exists in the rule set, it remains unchanged.
-   * @param {Rule} rule
+   * @param {LRule} rule
    */
   addRule(rule) {
+    for (let i = 0; i < this.rules.length; i++) {
+      if (this.rules[i].equals(rule)) {
+        return;
+      }
+    }
     this.rules.push(rule);
   }
 
@@ -63,11 +68,109 @@ class LSystem {
     this.axiom = axiom;
     return true;
   }
+
+  /**
+   * Evolves the axiom into its next generation. If no applicable rule is found for a symbol, the identity rule (A => A)
+   * will be applied.
+   */
+  evolve() {
+    let newAxiom = "";
+    let ruleFound;
+    for (let i = 0; i < this.axiom.length; i++) {
+      ruleFound = false;
+      for (let j = 0; j < this.rules.length; j++) {
+        if (this.axiom[i] == this.rules[j].getPred()) {
+          newAxiom.push(this.rules[j].getSucc());
+        }
+      }
+      if (!ruleFound) {
+        newAxiom.push(this.axiom[i]);
+      }
+    }
+    this.axiom = newAxiom;
+  }
 }
 
 /**
- * A LRule is a Rule used by a Lindemayer-System.
+ * A LRule is a Rule used by a Lindenmayer-System.
  * The form is:
  *      Symbol => Symbol(s), e.g.: A => AB
  */
-class LRule {}
+class LRule {
+  predecessor;
+  successor;
+
+  /**
+   * LRule constructor. It takes two Strings representing the rule.
+   * @param {String} predecessor
+   * @param {String} successor
+   */
+  constructor(predecessor, successor) {
+    this.predecessor = predecessor;
+    this.successor = successor;
+  }
+
+  /**
+   * Getter for successor.
+   * @returns the successor of this LRule.
+   */
+  getSucc() {
+    return this.successor;
+  }
+
+  /**
+   * Getter for predecessor.
+   * @returns the predecessor of this LRule.
+   */
+  getPred() {
+    return this.predecessor;
+  }
+
+  /**
+   * Creates a string representation of this rule.
+   * @returns a string representing this rule in the form of (predecessor => successor)
+   */
+  toString() {
+    return this.predecessor.toString + " => " + this.successor.toString;
+  }
+
+  /**
+   * Checks if the given rule is equal to this rule.
+   * @param {LRule} otherRule
+   */
+  equals(otherRule) {
+    return (
+      this.predecessor == otherRule.predecessor &&
+      this.successor == otherRule.successor
+    );
+  }
+}
+
+/**
+ * The Interpreter allows the assignment of meaning to a LSystem. An LSystem just produces a new word with each
+ * generation. Therefore it is necessary to define what a symbol means, if output should be generated.
+ */
+class LInterpreter {
+  lSystem;
+  meaningFunction;
+
+  /**
+   * Constructor for the LInterpreter.
+   * @param {LSystem} lSystem is the system that meaning should be applied to.
+   * @param {Function} meaningFunction is a function that can produce output(text, graphics, etc.) based on the
+   *                                   generations of the LSystem. The meaning function has to be able to
+   *                                   interpret all occuring symbols and/or handle unknown symbols.
+   */
+  constructor(lSystem, meaningFunction) {
+    this.lSystem = lSystem;
+    this.meaningFunction = meaningFunction;
+  }
+
+  /**
+   * Gatheres the current generation of the LSystem and applied the meaning function to it.
+   */
+  interpret() {
+    let currentGeneration = this.lSystem.evolve();
+    this.meaningFunction(currentGeneration);
+  }
+}

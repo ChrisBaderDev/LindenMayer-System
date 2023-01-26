@@ -26,11 +26,18 @@
  *
  */
 
+let lSystem;
+let interpreter;
+
 /**
  * The setup function allows to set P5.js specific settings.
  */
 function setup() {
+  // P5.js settings
   createCanvas(1000, 1000);
+
+  // LSystem creation
+  lSystem = setUpBallSystem();
 }
 
 /**
@@ -38,4 +45,36 @@ function setup() {
  */
 function draw() {
   background(220);
+}
+
+function setUpBallSystem() {
+  // Define System and Interpreter
+  lSystem = LSystem.emptySystem();
+  interpreter = LInterpreter(lSystem, ballSystemMeaningFunction);
+
+  // Define Symbols
+  lSystem.addSymbol("A");
+  lSystem.addSymbol("B");
+  lSystem.addSymbol("C");
+
+  // Define Rules
+  let r1 = LRule("A", "AB");
+  let r2 = LRule("B", "BC");
+  let r3 = LRule("C", "AC");
+
+  // Set Rules
+  lSystem.addRule(r1);
+  lSystem.addRule(r2);
+  lSystem.addRule(r3);
+
+  // Set Axiom
+  lSystem.changeAxiom("A");
+}
+
+/**
+ * Gives meaning to the given BallSystem generation.
+ * @param {String} generation
+ */
+function ballSystemMeaningFunction(generation) {
+  generation.array.forEach((element) => {});
 }
