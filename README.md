@@ -41,5 +41,7 @@ created LInterpreter class. As I'm just learning Javascript I also learned how J
 **Constructors**.
 
 ## Result
-![alt text](https://github.com/ChrisBaderDev/LindenMayer-System/Images/ResultImage.jpg?raw=true)
+<p align="center">
+  <img src="/Images/ResultImage.jpg" width="500" title="Different L-Systems for plant growth">
+</p>
     
