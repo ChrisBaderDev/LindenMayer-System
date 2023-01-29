@@ -1,4 +1,9 @@
 /**
+ * @author Christoph Bader
+ * @date 28.01.2023
+ */
+
+/**
  * Sources:
  * Great overview over different systems: https://www.houdinikitchen.net/2019/12/21/how-to-create-l-systems/#advgb-toc-2852cf93-4f44-43d7-a9c3-0e53ab1d16fb
  * Book about plant algorithms: http://algorithmicbotany.org/papers/abop/abop.pdf
@@ -279,10 +284,10 @@ function setUpBranchA() {
 function meaningFunctionBranchA(generation) {
   // Rotation angle
   let angle = 25.7;
-  let lineLength = 0.5;
+  let lineLength = 0.33;
   push();
   strokeWeight(1);
-  fill(0);
+  stroke(14, 43, 20, 50);
   translate(width * 0.25, height / 2);
   for (let i = 0; i < generation.length; i++) {
     switch (generation[i]) {
@@ -336,10 +341,10 @@ function setUpBranchB() {
 function meaningFunctionBranchB(generation) {
   // Rotation angle
   let angle = 20.0;
-  let lineLength = 2.5;
+  let lineLength = 1.5;
   push();
   strokeWeight(1);
-  fill(0);
+  stroke(14, 43, 20, 50);
   translate(width / 2, height / 2);
   for (let i = 0; i < generation.length; i++) {
     switch (generation[i]) {
@@ -396,7 +401,7 @@ function meaningFunctionBranchC(generation) {
   let lineLength = 1;
   push();
   strokeWeight(1);
-  fill(0);
+  stroke(14, 43, 20, 50);
   translate(width * 0.75, height / 2);
   for (let i = 0; i < generation.length; i++) {
     switch (generation[i]) {
@@ -456,7 +461,7 @@ function meaningFunctionBranchD(generation) {
   let lineLength = 0.5;
   push();
   strokeWeight(1);
-  fill(0);
+  stroke(14, 43, 20, 50);
   translate(width * 0.25, height);
   for (let i = 0; i < generation.length; i++) {
     switch (generation[i]) {
@@ -516,10 +521,10 @@ function setUpBranchE() {
 function meaningFunctionBranchE(generation) {
   // Rotation angle
   let angle = 25.7;
-  let lineLength = 0.5;
+  let lineLength = 0.33;
   push();
   strokeWeight(1);
-  fill(0);
+  stroke(14, 43, 20, 50);
   translate(width * 0.5, height);
   for (let i = 0; i < generation.length; i++) {
     switch (generation[i]) {
@@ -579,10 +584,10 @@ function setUpBranchF() {
 function meaningFunctionBranchF(generation) {
   // Rotation angle
   let angle = 22.5;
-  let lineLength = 0.5;
+  let lineLength = 0.4;
   push();
   strokeWeight(1);
-  fill(0);
+  stroke(14, 43, 20, 50);
   translate(width * 0.75, height);
   for (let i = 0; i < generation.length; i++) {
     switch (generation[i]) {

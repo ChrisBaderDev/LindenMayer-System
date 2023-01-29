@@ -40,7 +40,6 @@ let interpreters = [];
 function setup() {
   // P5.js settings
   createCanvas(1000, 1000);
-  frameRate(1);
 
   //Style
   backgroundImg = loadImage("../Images/paper-background.jpg");
@@ -54,15 +53,14 @@ function setup() {
  * The draw function acts as loop that should be called framerate per second times.
  */
 function draw() {
+  frameRate(1);
   image(backgroundImg, 0, 0, width, height);
   for (let j = 0; j < interpreters.length; j++) {
     interpreters[j].interpret();
   }
   if (frameCount % 6 == 0) {
     setUpAll();
-    setTimeout(() => {
-      console.log("Round completetd!");
-    }, 2500);
+    frameRate(0.1);
   }
 }
 
@@ -72,6 +70,9 @@ function setUpAll() {
   setUpInterpreters();
 }
 
+/**
+ * Function to set up branching systems.
+ */
 function setUpSystems() {
   structures[0] = setUpBranchA();
   structures[1] = setUpBranchB();
@@ -81,6 +82,9 @@ function setUpSystems() {
   structures[5] = setUpBranchF();
 }
 
+/**
+ * Function to setup meaning function for branchning systems.
+ */
 function setUpMeaningFunctions() {
   meaningFunctions[0] = meaningFunctionBranchA;
   meaningFunctions[1] = meaningFunctionBranchB;
@@ -90,6 +94,9 @@ function setUpMeaningFunctions() {
   meaningFunctions[5] = meaningFunctionBranchF;
 }
 
+/**
+ * Function to setup interpreters for individual systems.
+ */
 function setUpInterpreters() {
   interpreters[0] = new LInterpreter(structures[0], meaningFunctions[0]);
   interpreters[1] = new LInterpreter(structures[1], meaningFunctions[1]);
