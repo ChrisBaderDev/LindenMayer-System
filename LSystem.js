@@ -11,6 +11,7 @@ class LSystem {
   symbols;
   rules;
   axiom;
+  generationNumber;
 
   /**
    * Main constructor of the LSystem.
@@ -22,6 +23,7 @@ class LSystem {
     this.symbols = symbols;
     this.rules = rules;
     this.axiom = axiom;
+    this.generationNumber = 0;
   }
 
   /**
@@ -57,13 +59,15 @@ class LSystem {
   }
 
   /**
-   * Changes the given axiom to the given axiom. If the axiom is invalid (consiting of symbols that aren't in the symbol set) the
+   * Changes the axiom to the given axiom. If the axiom is invalid (consiting of symbols that aren't in the symbol set) the
    * axiom remains unchanged.
    * @param {String} axiom
    */
   changeAxiom(axiom) {
-    if ("Axiom is invalid") {
-      return false;
+    for (let i = 0; i < axiom.length; i++) {
+      if (this.symbols.find((elem) => elem == axiom[i]) == undefined) {
+        return false;
+      }
     }
     this.axiom = axiom;
     return true;
@@ -80,14 +84,27 @@ class LSystem {
       ruleFound = false;
       for (let j = 0; j < this.rules.length; j++) {
         if (this.axiom[i] == this.rules[j].getPred()) {
-          newAxiom.push(this.rules[j].getSucc());
+          newAxiom += this.rules[j].getSucc();
         }
       }
       if (!ruleFound) {
-        newAxiom.push(this.axiom[i]);
+        newAxiom += this.axiom[i];
       }
     }
     this.axiom = newAxiom;
+    this.generationNumber++;
+  }
+
+  /**
+   * Returns the current evolution state.
+   * @returns the current generation.
+   */
+  getCurrentGeneration() {
+    return this.axiom;
+  }
+
+  getGenerationAsNumber() {
+    return this.generationNumber;
   }
 }
 
@@ -170,7 +187,8 @@ class LInterpreter {
    * Gatheres the current generation of the LSystem and applied the meaning function to it.
    */
   interpret() {
-    let currentGeneration = this.lSystem.evolve();
+    let currentGeneration = this.lSystem.getCurrentGeneration();
+    this.lSystem.evolve();
     this.meaningFunction(currentGeneration);
   }
 }

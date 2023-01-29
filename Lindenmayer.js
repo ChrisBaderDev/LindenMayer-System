@@ -28,6 +28,11 @@
 
 let lSystem;
 let interpreter;
+let currentFunction;
+let backgroundImg;
+let structures = [];
+let meaningFunctions = [];
+let interpreters = [];
 
 /**
  * The setup function allows to set P5.js specific settings.
@@ -35,46 +40,66 @@ let interpreter;
 function setup() {
   // P5.js settings
   createCanvas(1000, 1000);
+  frameRate(1);
 
-  // LSystem creation
-  lSystem = setUpBallSystem();
+  //Style
+  backgroundImg = loadImage("../Images/paper-background.jpg");
+  image(backgroundImg, 0, 0);
+
+  // Setup Systems
+  setUpAll();
 }
 
 /**
  * The draw function acts as loop that should be called framerate per second times.
  */
 function draw() {
-  background(220);
+  image(backgroundImg, 0, 0, width, height);
+  for (let j = 0; j < interpreters.length; j++) {
+    interpreters[j].interpret();
+  }
+  if (frameCount % 6 == 0) {
+    setUpAll();
+    setTimeout(() => {
+      console.log("Round completetd!");
+    }, 2500);
+  }
 }
 
-function setUpBallSystem() {
-  // Define System and Interpreter
-  lSystem = LSystem.emptySystem();
-  interpreter = LInterpreter(lSystem, ballSystemMeaningFunction);
-
-  // Define Symbols
-  lSystem.addSymbol("A");
-  lSystem.addSymbol("B");
-  lSystem.addSymbol("C");
-
-  // Define Rules
-  let r1 = LRule("A", "AB");
-  let r2 = LRule("B", "BC");
-  let r3 = LRule("C", "AC");
-
-  // Set Rules
-  lSystem.addRule(r1);
-  lSystem.addRule(r2);
-  lSystem.addRule(r3);
-
-  // Set Axiom
-  lSystem.changeAxiom("A");
+function setUpAll() {
+  setUpSystems();
+  setUpMeaningFunctions();
+  setUpInterpreters();
 }
 
-/**
- * Gives meaning to the given BallSystem generation.
- * @param {String} generation
- */
-function ballSystemMeaningFunction(generation) {
-  generation.array.forEach((element) => {});
+function setUpSystems() {
+  structures[0] = setUpBranchA();
+  structures[1] = setUpBranchB();
+  structures[2] = setUpBranchC();
+  structures[3] = setUpBranchD();
+  structures[4] = setUpBranchE();
+  structures[5] = setUpBranchF();
+}
+
+function setUpMeaningFunctions() {
+  meaningFunctions[0] = meaningFunctionBranchA;
+  meaningFunctions[1] = meaningFunctionBranchB;
+  meaningFunctions[2] = meaningFunctionBranchC;
+  meaningFunctions[3] = meaningFunctionBranchD;
+  meaningFunctions[4] = meaningFunctionBranchE;
+  meaningFunctions[5] = meaningFunctionBranchF;
+}
+
+function setUpInterpreters() {
+  interpreters[0] = new LInterpreter(structures[0], meaningFunctions[0]);
+  interpreters[1] = new LInterpreter(structures[1], meaningFunctions[1]);
+  interpreters[2] = new LInterpreter(structures[2], meaningFunctions[2]);
+  interpreters[3] = new LInterpreter(structures[3], meaningFunctions[3]);
+  interpreters[4] = new LInterpreter(structures[4], meaningFunctions[4]);
+  interpreters[5] = new LInterpreter(structures[5], meaningFunctions[5]);
+
+  // Add one extra evolution
+  interpreters[3].interpret();
+  interpreters[4].interpret();
+  interpreters[5].interpret();
 }
